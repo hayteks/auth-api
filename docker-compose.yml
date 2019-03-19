@@ -1,0 +1,8 @@
+version: '3'
+services:
+    web:
+        build: .
+        ports:
+            - "4700:4700"
+        volumes:
+            - .:/auth-api
