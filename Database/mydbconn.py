@@ -20,7 +20,7 @@ def db_execute(statement, params):
             ret = cursor.execute(statement, params)
             conn.commit()
         except:
-            return [{ 'success' : False }]
+            return False
         finally:
             conn.close()
 
@@ -34,14 +34,20 @@ def db_execute_scalar(statement, params):
             cursor.execute(statement, params)
             rows = cursor.fetchall()
             if rows:
-                columns = [column[0] for column in cursor.description]
+                columns = [column[0].lower() for column in cursor.description]
+                
                 for row in rows:
-                    results.append(dict(zip(columns, row)))
+                    b = []
+                    for a in row:
+                        if isinstance(a, str):
+                            a = str(a).strip()
+                        b.append(a)
+
+                    results.append(dict(zip(columns, b)))
             
             conn.commit()
         except:
-            results = []
-            return results
+            return False
         finally:
             conn.close()
 
